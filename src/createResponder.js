@@ -1,5 +1,4 @@
 "use strict";
-
 import {InteractionManager} from "react-native";
 import TouchHistoryMath from "./TouchHistoryMath";
 import {pinchDistance} from "./TouchDistanceMath";
@@ -50,11 +49,11 @@ function updateGestureStateOnMove (gestureState, touchHistory, e) {
     const x = currentCentroidXOfTouchesChangedAfter(touchHistory, movedAfter);
     const prevY = previousCentroidYOfTouchesChangedAfter(touchHistory, movedAfter);
     const y = currentCentroidYOfTouchesChangedAfter(touchHistory, movedAfter);
-    const dx = -x - -prevX;
+    const dx = gestureState.pinch > 0 ? x - prevX: -x - -prevX;
     const dy = y - prevY;
 
     gestureState.numberActiveTouches = touchHistory.numberActiveTouches;
-    gestureState.moveX = -x;
+    gestureState.moveX = gestureState.pinch > 0 ? x : -x;
     gestureState.moveY = y;
 
     // TODO: This must be filtered intelligently.
@@ -66,7 +65,7 @@ function updateGestureStateOnMove (gestureState, touchHistory, e) {
     gestureState.dy += dy;
     gestureState._accountsForMovesUpTo = touchHistory.mostRecentTimeStamp;
 
-    gestureState.previousMoveX = -prevX;
+    gestureState.previousMoveX = gestureState.pinch > 0 ? prevX : -prevX;
     gestureState.previousMoveY = prevY;
     gestureState.pinch = pinchDistance(touchHistory, movedAfter, true);
     gestureState.previousPinch = pinchDistance(touchHistory, movedAfter, false);
