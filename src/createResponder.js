@@ -67,8 +67,11 @@ function updateGestureStateOnMove (gestureState, touchHistory, e) {
 
     gestureState.previousMoveX = gestureState.pinch > 0 ? prevX : -prevX;
     gestureState.previousMoveY = prevY;
-    gestureState.pinch = pinchDistance(touchHistory, movedAfter, true);
-    gestureState.previousPinch = pinchDistance(touchHistory, movedAfter, false);
+    const distance = pinchDistance(touchHistory, movedAfter, true);
+    if(gestureState.numberActiveTouches == 2 && distance > 86){
+         gestureState.pinch = pinchDistance(touchHistory, movedAfter, true);
+         gestureState.previousPinch = pinchDistance(touchHistory, movedAfter, false);
+    }
 }
 
 function clearInteractionHandle (interactionState) {
